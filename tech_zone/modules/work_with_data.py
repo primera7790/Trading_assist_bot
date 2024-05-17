@@ -1,10 +1,9 @@
 from decimal import Decimal
-from bot.tech_zone.modules.database_admin import table_select, table_update
+from .database_admin import table_select, table_update
 
 
 def work_volume_calculation(trade_percent='0', trade_volume='0', trade_commission='0', current_trade_id=None):
     balance = table_select('balance')
-    print(f'balance = {balance}')
     if float(balance) <= 0:
         return 'баланс пуст'
 
@@ -28,8 +27,6 @@ def work_volume_calculation(trade_percent='0', trade_volume='0', trade_commissio
         Decimal(day_results)
     except ArithmeticError:
         table_update('day_results', '0')
-
-    print('check done')
 
     change_volume = (Decimal(trade_volume) * (100 + Decimal(trade_percent)) / 100) - Decimal(trade_commission)
     new_balance = Decimal(balance) + change_volume - Decimal(trade_volume)
